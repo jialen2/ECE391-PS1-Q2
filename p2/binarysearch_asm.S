@@ -42,10 +42,80 @@
 binarySearch_asm:
   pushl %ebp
   movl %esp, %ebp
+  # Callee-saved registers
+  pushl %ebx
+  pushl %esi
+  pushl %edi
+  pushl %edx
+  # mid = ebx = 0
+  andl $0, %ebx
+  # low = esi
+  movl 16(%ebp), %esi
+  # high = edi
+  movl 20(%ebp), %edi
 
-  #--- YOUR CODE HERE ---
- 
-  #----------------------
+  # -if (low <= high)
+  cmpl %edi, %esi
+  jg finish
+  # mid = (low + high) / 2
+  andl $0, %eax
+  addl %esi, %eax
+  addl %edi, %eax
+  andl $0, %edx
+  movl $2, %ecx
+  div %ecx
+  movl %eax, %ebx
 
+  # arr = edx
+  movl 8(%ebp), %edx
+  # arr[mid] = eax
+  movl 0(%edx, %ebx, 4), %eax
+  # md = ecx
+  movl 12(%ebp), %ecx
+  cmpl %eax, %ecx
+  je find_value
+  jl search_left
+  jmp search_right
+
+
+find_value:
+  movl $1, %eax
+  jmp return
+  
+search_left:
+  # Push parameters
+  movl %ebx, %eax
+  subl $1, %eax
+  pushl %eax
+  pushl %esi
+  pushl %ecx
+  pushl %edx
+  call binarySearch_asm
+  addl $16, %esp
+  jmp return
+
+search_right:
+  # Push parameters
+  pushl %edi
+  movl %ebx, %edi
+  addl $1, %edi
+  pushl %edi
+  pushl %ecx
+  pushl %edx
+  call binarySearch_asm
+  addl $16, %esp
+  jmp return
+
+return:
+  popl %edx
+  popl %edi
+  popl %esi
+  popl %ebx
   leave
   ret
+  
+
+finish:
+  movl $1, %eax
+  neg %eax
+  jmp return

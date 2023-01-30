@@ -38,14 +38,15 @@
 
 #include "binarysearch.h"
 
-int32_t* import_arr(char* fname, uint32_t* find, uint32_t* num) {
-  FILE* f = fopen(fname, "r");
+int32_t *import_arr(char *fname, uint32_t *find, uint32_t *num)
+{
+  FILE *f = fopen(fname, "r");
   uint32_t i, key, num_elements;
 
-
   fscanf(f, "%d %d\n", &num_elements, find);
-  int32_t* arr = malloc(sizeof(int32_t) * num_elements);
-  for (i = 0; i < num_elements; i++) {
+  int32_t *arr = malloc(sizeof(int32_t) * num_elements);
+  for (i = 0; i < num_elements; i++)
+  {
     fscanf(f, "%d\n", &key);
     arr[i] = key;
   }
@@ -54,23 +55,25 @@ int32_t* import_arr(char* fname, uint32_t* find, uint32_t* num) {
   return arr;
 }
 
-int main(int argc, char** argv) {
-  if(argc < 2) {
+int main(int argc, char **argv)
+{
+  if (argc < 2)
+  {
     printf("Usage: ./maze <input_maze>\n");
     return -1;
   }
-  int32_t* arr = NULL;
+  int32_t *arr = NULL;
   uint32_t find = 0;
   uint32_t num_elements = 0;
-  
+
   arr = import_arr(argv[1], &find, &num_elements);
-  //printf("Reading Tree:\n");
-  //print(root);
+  // printf("Reading Tree:\n");
+  // print(root);
 
-  //printf("\nBeginning C Search\n");
-  printf("search find %d: %d\n", find, binarySearch(arr, find, 0, num_elements));
+  // printf("\nBeginning C Search\n");
+  printf("search find %d: %d\n", find, binarySearch_asm(arr, find, 0, num_elements));
 
-  //printf("Beginning ASM Search\n");
-  // printf("search find %d: %d\n", find, search_asm(root, find));
+  // printf("Beginning ASM Search\n");
+  //  printf("search find %d: %d\n", find, search_asm(root, find));
   return 0;
 }
