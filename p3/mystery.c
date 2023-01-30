@@ -32,9 +32,26 @@
 
 #include "mystery.h"
 
-int32_t mystery_c(uint32_t opcode, uint32_t x, uint32_t y){
+int32_t mystery_c(uint32_t opcode, uint32_t x, uint32_t y)
+{
 
   //------- YOUR CODE HERE -------
+
+  if (opcode < 0)
+    return 2989;
+
+  if (opcode > 2)
+    return 2989;
+
+  if (opcode == 0)
+    return y;
+
+  if (opcode == 1)
+    return x + 7 * y;
+
+  if (opcode == 2)
+    return x % y;
+
   return 0;
   //------------------------------
 }
